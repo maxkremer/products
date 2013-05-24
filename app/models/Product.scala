@@ -4,7 +4,11 @@ import anorm.SqlParser._
 import play.api.db._
 import play.api.Play.current
 
-case class Product(id: Long, ean: Long, name: String, description: String)
+case class Product(id: Long, ean: Long, name: String, description: String){
+  
+  def this( ean: Long, name: String, description: String) = this(0, ean, name, description)
+  
+}
 
 object Product {
 
@@ -38,6 +42,20 @@ object Product {
       SQL("""insert
     		  into products
     		  values ({id}, {ean}, {name}, {description})""").on(
+    				  "id" -> product.id,
+    				  "ean" -> product.ean,
+    				  "name" -> product.name,
+    				  "description" -> product.description).executeUpdate() == 1
+    }
+  }
+  
+   def save(product: Product): Boolean = {
+    DB.withConnection { implicit connection =>
+      SQL("""update products
+    		  set ean = {ean},
+              name= {name},
+              description = {description}
+              WHERE id = {id} """).on(
     				  "id" -> product.id,
     				  "ean" -> product.ean,
     				  "name" -> product.name,

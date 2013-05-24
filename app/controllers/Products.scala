@@ -17,12 +17,20 @@ object Products extends Controller {
       "name" -> nonEmptyText,
       "description" -> nonEmptyText)((ean, name, desc) => Product(0, ean, name, desc))((prod: Product) => Some(prod.ean, prod.name, prod.description)))
 
+  //Implicit conversion object for Product serialization to Json    
   implicit object ProductWrites extends Writes[Product] {
     def writes(p: Product) = Json.toJson(
       Map(
         "ean" -> Json.toJson(p.ean),
         "name" -> Json.toJson(p.name),
         "description" -> Json.toJson(p.description)))
+  }
+
+  implicit object ProductReads extends Reads[Product] {
+    def reads(json: JsValue) = new Product(
+      (json \ "ean").as[Long],
+      (json \ "name").as[String],
+      (json \ "description").as[String])
   }
 
   //product list  
@@ -40,26 +48,14 @@ object Products extends Controller {
     }.getOrElse(NotFound)
   }
 
-  def save = Action { implicit request =>
-    val newProductForm = this.productForm.bindFromRequest()
-    newProductForm.fold(
-      hasErrors = {
-        form => Redirect(routes.Products.newProduct()).flashing(Flash(form.data) + ("error" -> Messages("validation.errors")))
-      },
-      success = {
-        newProduct =>
-          Product.add(newProduct)
-          val message = Messages("products.new.success", newProduct.name)
-          Redirect(routes.Products.show(newProduct.ean)).flashing("success" -> message)
-      })
+  def save(ean:Long) = Action(parse.json) { implicit request =>
+    val productJson = request.body
+    val product = productJson.as[Product]
+
+    Product.save(product)
+    Ok("Saved")
   }
 
-  def newProduct = Action { implicit request =>
-    val form = if (flash.get("error").isDefined)
-      this.productForm.bind(flash.data)
-    else
-      this.productForm
-    Ok(views.html.products.editProduct(form))
-  }
+  
 
 }
