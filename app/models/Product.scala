@@ -4,29 +4,24 @@ import anorm.SqlParser._
 import play.api.db._
 import play.api.Play.current
 
-case class Product(id: Long, ean: Long, name: String, description: String){
-  
-  def this( ean: Long, name: String, description: String) = this(0, ean, name, description)
-  
-}
+case class Product(id: Option[Long], name: String, description: String)
 
 object Product {
 
   val productParser: RowParser[Product] = {
-    get[Long]("id") ~
-      get[Long]("ean") ~
+    get[Long]("id") ~      
       get[String]("name") ~
       get[String]("description") map {
-        case id ~ ean ~ name ~ description => Product(id, ean, name, description)
+        case id ~ name ~ description => Product(Option(id),  name, description)
       }
   }
 
   def findAll = DB.withConnection { implicit c =>
-    SQL("select id, ean, name, description from products").as(productParser *)
+    SQL("select id, name, description from trials").as(productParser *)
   }
 
-  def findByEan(ean: Long): Option[Product] = DB.withConnection { implicit c =>
-    val selectEan = SQL("select id, ean, name, description from products where ean = {ean}").on("ean" -> ean).as(productParser *)
+  def findByID(id: Long): Option[Product] = DB.withConnection { implicit c =>
+    val selectId = SQL("select id, name, description from trials where id = {id}").on("id" -> id).as(productParser *)
     
     def listEan(xs: List[Product]) = xs match{
       case List() => None
@@ -34,16 +29,14 @@ object Product {
       case x :: ys => Option(x)
     }
     
-    listEan(selectEan)
+    listEan(selectId)
   }
 
   def add(product: Product): Boolean = {
     DB.withConnection { implicit connection =>
       SQL("""insert
-    		  into products
-    		  values ({id}, {ean}, {name}, {description})""").on(
-    				  "id" -> product.id,
-    				  "ean" -> product.ean,
+    		  into trials (name, description)
+    		  values ( {name}, {description})""").on(    				  
     				  "name" -> product.name,
     				  "description" -> product.description).executeUpdate() == 1
     }
@@ -51,13 +44,11 @@ object Product {
   
    def save(product: Product): Boolean = {
     DB.withConnection { implicit connection =>
-      SQL("""update products
-    		  set ean = {ean},
+      SQL("""update trials set    		 
               name= {name},
               description = {description}
               WHERE id = {id} """).on(
-    				  "id" -> product.id,
-    				  "ean" -> product.ean,
+    				  "id" -> product.id,    				  
     				  "name" -> product.name,
     				  "description" -> product.description).executeUpdate() == 1
     }
