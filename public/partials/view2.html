@@ -1,0 +1,22 @@
+	<div class="screenshot">
+	
+		<div class="container">
+			<input type="text" ng-model="filter.text" />
+			<ul>
+				<li ng-repeat = "prod in products | filter:filter.text">
+					{{prod.id}} --	{{prod.name}} -- {{prod.description}}
+				</li>
+			</ul>
+		</div>
+        
+        <div class="container">
+        	New Product Name: <br/>
+         	<input type="text" ng-model = "newProduct.name" />
+        	New Product Description:<br/>
+        	<input type="textarea" ng-model = "newProduct.description" />
+        	<br/>
+        	<button ng-click="addProduct()">Add </button>	
+        
+        
+        </div>
+	</div>

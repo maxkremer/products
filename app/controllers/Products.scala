@@ -39,6 +39,13 @@ object Products extends Controller {
 
     Ok(Json.toJson(productCodes))
   }
+  
+  def listDetails = Action { implicit request =>
+    val products = Product.findAll
+    
+
+    Ok(Json.toJson(products))
+  }
 
   //display an individual product by id
   def show(id: Long) = Action { implicit request =>

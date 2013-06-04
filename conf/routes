@@ -5,6 +5,7 @@
 # Home page
 GET     /                           controllers.Application.index
 GET		/products					controllers.Products.list
+GET		/productdetails				controllers.Products.listDetails
 GET	    /products/:id 				controllers.Products.show(id: Long)
 
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="productsModule">
 <head>
 <title>Products</title>
 <link rel='stylesheet' type='text/css'
@@ -7,12 +7,17 @@
 <link rel='stylesheet' type='text/css' href="@routes.Assets.at("stylesheets/main.css")">
 <script src='@routes.Assets.at("javascripts/jquery-1.7.1.min.js")'
 	type='text/javascript'></script>
+<script src='@routes.Assets.at("javascripts/angular.min.js")'
+	type='text/javascript'></script>
 <script src='@routes.Assets.at("javascripts/product.js")'
 	type='text/javascript'></script>
-
+<script src='@routes.Assets.at("javascripts/product_ang.js")'
+	type='text/javascript'></script>
+<script src='@routes.Assets.at("javascripts/angular-resource.min.js")'
+	type='text/javascript'></script>
 
 </head>
-<body>
+<body ng-controller="MoreDataController">
 	<div class="screenshot">
 		<div class="navbar navbar-fixed-top">
 			<div class="navbar-inner">
@@ -30,6 +35,11 @@
 		</div>
          <button id="btnnew">Create</button>	
 	</div>
+	
+	<ng-view></ng-view>
+	
+
+	
 
 	<div id="newitem" class="screenshot" style="display: none;">
 		<div class="navbar navbar-fixed-top">
@@ -42,8 +52,9 @@
 					  <div class="control-group">
 					    <label class="control-label" for="inputName">Name</label>
 					    <div class="controls">
-					      <input type="text" id="inputName" name="name" placeholder="Name">
+					      <input type="text" id="inputName" name="name" placeholder="Name" ng-model="name">
 					    </div>
+					    <label class="control-label" for="inputDescription">{{name | uppercase}}</label>
 					  </div>
 					  
 					  <div class="control-group">
@@ -56,7 +67,7 @@
 					  <div class="control-group">
 					    <div class="controls">
 					      
-					      <button type="submit" class="btn" >Sign in</button>
+					      <button type="submit" class="btn" >Save</button>
 					    </div>
 					  </div>
 					</form>
@@ -68,5 +79,9 @@
 		<pre id="result">
 		</pre>
 		<div id="formResponse"></div>
+		<div class="container">
+		
+		@debug()
+		</div>
 </body>
 </html>
