@@ -53,5 +53,12 @@ object Product {
     				  "description" -> product.description).executeUpdate() == 1
     }
   }
+   
+  def delete(id: Long): Boolean = {
+    DB.withConnection { implicit connection =>
+      SQL("""delete FROM trials WHERE id = {id} """).on(
+    				  "id" -> id).executeUpdate() == 1
+    }
+  } 
 
 }

@@ -10,6 +10,7 @@ GET	    /products/:id 				controllers.Products.show(id: Long)
 
 
 PUT 	/products/:id 				controllers.Products.save(id: Long)
+DELETE 	/products/:id 				controllers.Products.delete(id: Long)
 
 POST 	/products/new 				controllers.Products.add()
 

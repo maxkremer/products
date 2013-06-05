@@ -54,7 +54,7 @@ object Products extends Controller {
     }.getOrElse(NotFound)
   }
 
-  def save(ean:Long) = Action(parse.json) { implicit request =>
+  def save(id:Long) = Action(parse.json) { implicit request =>
     val productJson = request.body
     val product = productJson.as[Product]
 
@@ -68,6 +68,11 @@ object Products extends Controller {
 
     Product.add(product)
     Ok("Saved")
+  }
+  
+  def delete(id:Long) = Action{implicit request =>
+  	Product.delete(id)
+    Ok("Deleted")
   }
 
 

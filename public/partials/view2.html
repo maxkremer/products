@@ -4,11 +4,11 @@
 			<input type="text" ng-model="filter.text" />
 			<ul>
 				<li ng-repeat = "prod in products | filter:filter.text">
-					{{prod.id}} --	{{prod.name}} -- {{prod.description}}
+					{{prod.id}} --	{{prod.name}} -- {{prod.description}} <button ng-click="deleteProduct(prod.id)">Delete </button>
 				</li>
 			</ul>
 		</div>
-        
+        <div class="message">{{message}}</div>
         <div class="container">
         	New Product Name: <br/>
          	<input type="text" ng-model = "newProduct.name" />
