@@ -29,6 +29,32 @@ productsModule.factory('simpleFactory',function($resource){
         products = r.query();
 	    return products;
 	};
+
+    factory.getExperiences = function(){
+        var experiences;
+        experiences = {
+            project: "Autodesk Inventor Online",
+            days: [
+                {dayid: 1,
+                    daywidgets: [
+                        {widgetid: 1, widgetname: "Email Widget", widgetconfig: "This is how the diget is configured"},
+                        {widgetid: 2, widgetname: "Facebook Widget", widgetconfig: "This is how the diget is configured"},
+                        {widgetid: 3, widgetname: "Salesforce Widget", widgetconfig: "This is how the diget is configured"},
+                        {widgetid: 4, widgetname: "Another Widget", widgetconfig: "This is how the diget is configured"}
+                    ]},
+                {dayid: 2,
+                    daywidgets: [
+                        {widgetid: 1, widgetname: "Email Widget", widgetconfig: "This is how the diget is configured"},
+                        {widgetid: 2, widgetname: "Facebook Widget", widgetconfig: "This is how the diget is configured"},
+                        {widgetid: 3, widgetname: "Salesforce Widget", widgetconfig: "This is how the diget is configured"},
+                        {widgetid: 4, widgetname: "Another Widget", widgetconfig: "This is how the diget is configured"}
+                    ]
+
+                }
+            ]
+        };
+        return experiences;
+    };
 	
 	return factory;
 });
@@ -37,6 +63,8 @@ productsModule.factory('simpleFactory',function($resource){
 var controllers1 = {}; 
 controllers1.SimpleController = function($scope, $http, simpleFactory){
 							$scope.products = simpleFactory.getProducts();
+
+                            $scope.experiences = simpleFactory.getExperiences();
 
                             $scope.restTest = function(){
                                 //TODO make this use $resource
